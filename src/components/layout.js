@@ -4,6 +4,7 @@ import { storyblokInit, apiPlugin } from "gatsby-source-storyblok"
 import Teaser from './Teaser'
 import Grid from "./grid"
 import Feature from "./feature"
+import TextBlock from "./text-block";
 
 storyblokInit({
   accessToken: process.env.GATSBY_PREVIEW_STORYBLOK,
@@ -11,7 +12,8 @@ storyblokInit({
   components: {
     teaser: Teaser,
     grid: Grid,
-    feature: Feature
+    feature: Feature,
+    textBlock: TextBlock,
   }
 });
 

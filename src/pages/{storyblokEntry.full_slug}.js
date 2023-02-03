@@ -1,20 +1,30 @@
-import * as React from "react"
+import React from "react"
 import { graphql } from "gatsby"
+import localStorage from 'local-storage'
 
 import { StoryblokComponent, storyblokEditable, useStoryblokState } from "gatsby-source-storyblok"
 
 import Layout from "../components/layout"
 
 const IndexPage = ({ data }) => {
-  let story = data.storyblokEntry
-  story = useStoryblokState(story)
+  const pageQueryStory = data.storyblokEntry;
+  const persistedQueryIdentifier = `storyBlokSavedLiveQuery-${pageQueryStory.id}`;
+  const liveQueryStoryContentFromLocalStorage = localStorage.get(persistedQueryIdentifier);
 
-  const components = story.content.body.map(blok => (<StoryblokComponent blok={blok} key={blok._uid} />))
+  const preservedQueryStory = {
+    ...pageQueryStory,
+    content: liveQueryStoryContentFromLocalStorage ?? pageQueryStory.content
+  }
+
+  const liveQueryStory = useStoryblokState(preservedQueryStory);
+  localStorage.set(persistedQueryIdentifier, liveQueryStory.content);
+
+  const components = liveQueryStory.content.body.map(blok => (<StoryblokComponent blok={blok} key={blok._uid} />))
 
   return (
     <Layout>
-      <div {...storyblokEditable(story.content)}>
-        <h1>{story.name}</h1>
+      <div {...storyblokEditable(liveQueryStory.content)}>
+        <h1>{liveQueryStory.name}</h1>
         {components}
       </div>
     </Layout>

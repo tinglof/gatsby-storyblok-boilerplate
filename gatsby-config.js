@@ -1,6 +1,8 @@
-require("dotenv").config({
-  path: `.env.${process.env.NODE_ENV || "production"}`,
-})
+// require("dotenv").config({
+//   path: `.env.${process.env.NODE_ENV || "production"}`,
+// })
+
+require("dotenv").config();
 
 module.exports = {
   siteMetadata: {
@@ -12,13 +14,6 @@ module.exports = {
   plugins: [
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-image`,
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `images`,
-        path: `${__dirname}/src/images`,
-      },
-    },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
@@ -39,8 +34,8 @@ module.exports = {
       resolve: 'gatsby-source-storyblok',
       options: {
         accessToken: process.env.GATSBY_PREVIEW_STORYBLOK,
-        version: process.env.NODE_ENV === 'production' ? 'published' : 'draft',
-        localAssets: true, // Optional parameter to download the images to use with Gatsby Image Plugin
+        version: process.env.GATSBY_STORYBLOK_ENV === "production" ? 'published' : 'draft',
+        localAssets: false, // Optional parameter to download the images to use with Gatsby Image Plugin
         // languages: ['de', 'at'] // Optional parameter. Omission will retrieve all languages by default.
       }
     },
